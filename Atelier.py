@@ -5,9 +5,6 @@ import numpy as np
 import sqlite3
 
 
-
-
-
 class Sequence:
     def __init__(self):
         global variable
@@ -18,26 +15,28 @@ class Sequence:
         plt.ion()
         plt.rcParams['text.usetex'] = True
         plt.pause(0.0001)
-        while True :
-            operation = [inquirer.List
-                          ("Que souhaitez-vous faire ?",
-                           message="Que souhaitez-vous faire ?",
-                           choices=['Suite', 'Fonction','Operation','Quitter'])]
-            answers = inquirer.prompt(operation)
-            if (answers["Que souhaitez-vous faire ?"]=="Suite"):
-                self.ajouter_suite()
-            elif (answers["Que souhaitez-vous faire ?"]=="Quitter"):
-                break
-    def ajouter_suite(self):
         while True:
             if len(variable) > 0:
                 for suite in variable:
                     print(suite + " : " + variable[suite]["Expression"])
-            expression = [inquirer.List
+            """operation = [inquirer.List
+                          ("Que souhaitez-vous faire ?",
+                           message="Que souhaitez-vous faire ?",
+                           choices=['Suite', 'Fonction','Operation','Quitter'])]"""
+            answers = input("Que souhaitez-vous faire ?")
+
+            if (answers["Que souhaitez-vous faire ?"] == "Suite"):
+                self.ajouter_suite()
+            elif (answers["Que souhaitez-vous faire ?"] == "Quitter"):
+                break
+
+    def Add_Sequence(self, mode, n_min, n_max, expression):
+        while True:
+            """expression = [inquirer.List
                           ("Suite",
                            message="[+] : ajouter une suite         [-] : supprimer une suite",
                            choices=['[+]', '[-]','Retour'])]
-            answers = inquirer.prompt(expression)
+            answers = inquirer.prompt(expression)"""
             if answers['Suite'] == 'Retour':
                 break
             elif answers['Suite'] == '[+]':
@@ -53,25 +52,27 @@ class Sequence:
                 if answers['Choix de l\'expression'] == 'Explicite':
                     name = input("nom de la variable :")
                     variable[name] = self.explicite_sequence(name)
-            elif answers['Suite']=='[-]':
+            elif answers['Suite'] == '[-]':
                 delete = [inquirer.List
-                            ('Choix de l\'expression',
-                             message="Quelle sera la forme de la suite ?",
-                             choices=[i for i in variable])]
+                          ('Choix de l\'expression',
+                           message="Quelle sera la forme de la suite ?",
+                           choices=[i for i in variable])]
                 answer = inquirer.prompt(delete)
-                if (variable[answer]!=None):
+                if (variable[answer] != None):
                     self.update(variable[answer])
-    def explicite_sequence (self,name):
+
+    def explicite_sequence(self, name):
         u_0 = int(input("u_0 ="))
         u_n = (input(name + " : "))
         i = int(input("n="))
         value = []
         for n in range(i):
             value.append(eval(u_n))
-        element = {"n": len(value), "Expression": u_n, "Valeur": value,"Modifiée":True}
-        self.draw (element)
+        element = {"n": len(value), "Expression": u_n, "Valeur": value, "Modifiée": True}
+        self.draw(element)
         return element
-    def recurrence_sequence(self,name):
+
+    def recurrence_sequence(self, name):
         u_0 = int(input("u_0 ="))
         u_n = u_0
         u_nplusun = (input(name + " : "))
@@ -80,13 +81,13 @@ class Sequence:
         for i in range(n):
             u_n = eval(u_nplusun)
             value.append(u_n)
-        element = {"n": len(value), "Expression": u_nplusun, "Valeur": value,"Modifiée":True}
-        self.draw (element)
+        element = {"n": len(value), "Expression": u_nplusun, "Valeur": value, "Modifiée": True}
+        self.draw(element)
         return element
 
-    def draw(self,element):
-        #Graphique
-        if (element!=None):
+    def draw(self, element):
+        # Graphique
+        if (element != None):
             n_max = []
             patch = []
             x = []
@@ -103,5 +104,7 @@ class Sequence:
         patch.append(mpatches.Patch(color='red', label=r'y=x'))
         plt.plot([i for i in range(n_max[-1])], [i for i in range(n_max[-1])], 'r')
         plt.legend(loc='upper right', handles=patch)
-        #Base de donnée
+        # Base de donnée
+
+
 e = Sequence()
